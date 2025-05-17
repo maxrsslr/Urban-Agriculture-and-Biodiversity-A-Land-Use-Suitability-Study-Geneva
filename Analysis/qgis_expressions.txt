@@ -1,1 +1,36 @@
+Select all NUAs
+"CAT_LU" IN ('Allotment gardens', 'Collective spaces', 'Farmlands', 'Parks and public gardens', 'Woods and shrubs')
+
+Create category variables 
+Fragmentation
+CASE
+  WHEN  "FR analysis_FR"  <= 0.754 THEN 1
+  WHEN  "FR analysis_FR"  > 0.754 AND  "FR analysis_FR"  <= 1.372 THEN 2
+  ELSE 3
+END
+
+ET_score
+CASE 
+WHEN “LC_analysis_ET_score” <= 36.42 THEN ‘A’
+WHEN “LC_analysis_ET_score” > 36.42 AND “LC_analysis_ET_score” <= 53.21 THEN ‘B’
+ELSE ‘C’
+END
+
+Proximity
+CASE
+  WHEN   "Proximity analysis _PR_index"   <= 0.067531 THEN 'Low'
+  ELSE 'High'
+END
+
+Create a unique code field 
+"CAT_LU" || '_' ||  "ET_score"  || '_' || "Fragmentation" || '_' || "Proximity"
+
+Create a unique compatibility field
+"CAT_LU" || '_' || "Fragmentation" || '_' || "Proximity" || '_' || "Suitability matrix_2_PLU" ||'_' ||"unique_compat_Compatibility" 
+
+Calculate Final PLU
+CASE
+  WHEN  "unique_compat_Compatibility" = false THEN  "unique_reassign_reassign" 
+  ELSE "Suitability matrix_2_PLU"
+END
 
